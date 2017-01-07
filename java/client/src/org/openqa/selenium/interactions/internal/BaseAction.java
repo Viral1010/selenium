@@ -17,6 +17,9 @@
 
 package org.openqa.selenium.interactions.internal;
 
+import com.google.common.base.Preconditions;
+
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactive.IsInteraction;
 import org.openqa.selenium.internal.Locatable;
 
@@ -33,5 +36,11 @@ public abstract class BaseAction implements IsInteraction {
    */
   protected BaseAction(Locatable actionLocation) {
     this.where = actionLocation;
+  }
+
+  protected WebElement getTargetElement() {
+    Preconditions.checkNotNull(where, "Unable to determine where to move to");
+    Preconditions.checkState(where.getCoordinates().getAuxiliary() instanceof WebElement, "Unable to find element to use: %s", where.getCoordinates());
+    return (WebElement) where.getCoordinates().getAuxiliary();
   }
 }

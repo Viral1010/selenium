@@ -29,12 +29,6 @@ import org.openqa.selenium.internal.Locatable;
  */
 public abstract class MouseAction extends BaseAction {
 
-  protected WebElement getTargetElement() {
-    Preconditions.checkNotNull(where, "Unable to determine where to move to");
-    Preconditions.checkState(where.getCoordinates().getAuxiliary() instanceof WebElement, "Unable to find element to use: %s", where.getCoordinates());
-    return (WebElement) where.getCoordinates().getAuxiliary();
-  }
-
   public enum Button {
     LEFT(0),
     MIDDLE(1),

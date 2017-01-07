@@ -151,4 +151,21 @@ public class PointerInput implements InputDevice, Encodable {
       return wireName;
     }
   }
+
+  public enum MouseButton {
+    LEFT(0),
+    MIDDLE(1),
+    RIGHT(2),
+    ;
+
+    private final int button;
+
+    MouseButton(int button) {
+      this.button = button;
+    }
+
+    public int asArg() {
+      return button;
+    }
+  }
 }

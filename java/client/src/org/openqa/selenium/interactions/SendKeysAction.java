@@ -17,6 +17,8 @@
 
 package org.openqa.selenium.interactions;
 
+import com.google.common.collect.ImmutableList;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.KeysRelatedAction;
 import org.openqa.selenium.interactive.Interaction;
@@ -24,6 +26,7 @@ import org.openqa.selenium.interactive.KeyInput;
 import org.openqa.selenium.interactive.PointerInput;
 import org.openqa.selenium.internal.Locatable;
 
+import java.time.Duration;
 import java.util.List;
 
 /**
@@ -35,7 +38,10 @@ import java.util.List;
 public class SendKeysAction extends KeysRelatedAction implements Action {
   private final CharSequence[] keysToSend;
 
-  public SendKeysAction(Keyboard keyboard, Mouse mouse, Locatable locationProvider,
+  public SendKeysAction(
+      Keyboard keyboard,
+      Mouse mouse,
+      Locatable locationProvider,
       CharSequence... keysToSend) {
     super(keyboard, mouse, locationProvider);
     this.keysToSend = keysToSend;
@@ -53,6 +59,20 @@ public class SendKeysAction extends KeysRelatedAction implements Action {
 
   @Override
   public List<Interaction> asInteractions(PointerInput mouse, KeyInput keyboard) {
-    throw new UnsupportedOperationException("asInteractions");
+    ImmutableList.Builder<Interaction> interactions = ImmutableList.builder();
+
+    if (where != null) {
+      WebElement target = getTargetElement();
+      interactions.add(mouse.createPointerMove(Duration.ofMillis(200), target, 1, 1));
+    }
+
+    for (CharSequence keys : keysToSend) {
+      keys.codePoints().forEach(codePoint -> {
+        interactions.add(keyboard.createKeyDown(codePoint));
+        interactions.add(keyboard.createKeyUp(codePoint));
+      });
+    }
+
+    return interactions.build();
   }
 }
