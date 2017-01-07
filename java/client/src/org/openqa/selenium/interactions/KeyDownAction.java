@@ -20,7 +20,12 @@ package org.openqa.selenium.interactions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.SingleKeyAction;
+import org.openqa.selenium.interactive.Interaction;
+import org.openqa.selenium.interactive.KeyInput;
+import org.openqa.selenium.interactive.PointerInput;
 import org.openqa.selenium.internal.Locatable;
+
+import java.util.List;
 
 /**
  * Emulates key press only, without the release.
@@ -41,5 +46,10 @@ public class KeyDownAction extends SingleKeyAction implements Action {
     focusOnElement();
 
     keyboard.pressKey(key);
+  }
+
+  @Override
+  public List<Interaction> asInteractions(PointerInput mouse, KeyInput keyboard) {
+    throw new UnsupportedOperationException("asInteractions");
   }
 }

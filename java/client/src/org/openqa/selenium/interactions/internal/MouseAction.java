@@ -18,21 +18,36 @@
 
 package org.openqa.selenium.interactions.internal;
 
+import com.google.common.base.Preconditions;
+
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Mouse;
 import org.openqa.selenium.internal.Locatable;
 
 /**
  * Base class for all mouse-related actions.
  */
-public class MouseAction extends BaseAction {
+public abstract class MouseAction extends BaseAction {
+
+  protected WebElement getTargetElement() {
+    Preconditions.checkNotNull(where, "Unable to determine where to move to");
+    Preconditions.checkState(where.getCoordinates().getAuxiliary() instanceof WebElement, "Unable to find element to use: %s", where.getCoordinates());
+    return (WebElement) where.getCoordinates().getAuxiliary();
+  }
+
   public enum Button {
     LEFT(0),
     MIDDLE(1),
     RIGHT(2);
 
-    private final int b;
-    Button(int b) {
-      this.b = b;
+    private final int button;
+
+    Button(int button) {
+      this.button = button;
+    }
+
+    public int asArg() {
+      return button;
     }
   }
 

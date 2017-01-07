@@ -10,7 +10,8 @@ public class Pause extends Interaction implements Encodable {
 
   private final Duration duration;
 
-  protected Pause(InputDevice device, Duration duration) {
+  // TODO(simons): Reduce visibility?
+  public Pause(InputDevice device, Duration duration) {
     super(device);
 
     Preconditions.checkState(!duration.isNegative(), "Duration must be set to 0 or more: %s", duration);

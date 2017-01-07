@@ -19,7 +19,12 @@ package org.openqa.selenium.interactions;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.KeysRelatedAction;
+import org.openqa.selenium.interactive.Interaction;
+import org.openqa.selenium.interactive.KeyInput;
+import org.openqa.selenium.interactive.PointerInput;
 import org.openqa.selenium.internal.Locatable;
+
+import java.util.List;
 
 /**
  * Sending a sequence of keys to an element.
@@ -44,5 +49,10 @@ public class SendKeysAction extends KeysRelatedAction implements Action {
     focusOnElement();
 
     keyboard.sendKeys(keysToSend);
+  }
+
+  @Override
+  public List<Interaction> asInteractions(PointerInput mouse, KeyInput keyboard) {
+    throw new UnsupportedOperationException("asInteractions");
   }
 }

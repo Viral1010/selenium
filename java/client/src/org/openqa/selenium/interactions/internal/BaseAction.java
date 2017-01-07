@@ -17,12 +17,13 @@
 
 package org.openqa.selenium.interactions.internal;
 
+import org.openqa.selenium.interactive.IsInteraction;
 import org.openqa.selenium.internal.Locatable;
 
 /**
  * Base class for all actions.
  */
-public abstract class BaseAction {
+public abstract class BaseAction implements IsInteraction {
   protected final Locatable where;
 
   /**

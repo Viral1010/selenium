@@ -19,12 +19,13 @@ package org.openqa.selenium.interactions.internal;
 
 import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.interactions.Mouse;
+import org.openqa.selenium.interactive.IsInteraction;
 import org.openqa.selenium.internal.Locatable;
 
 /**
  * Represents a general action related to keyboard input.
  */
-public abstract class KeysRelatedAction extends BaseAction {
+public abstract class KeysRelatedAction extends BaseAction implements IsInteraction {
   protected final Keyboard keyboard;
   protected final Mouse mouse;
 

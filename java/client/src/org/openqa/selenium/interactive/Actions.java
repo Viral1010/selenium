@@ -2,7 +2,10 @@ package org.openqa.selenium.interactive;
 
 import static org.openqa.selenium.interactive.PointerInput.Kind.MOUSE;
 
+import com.google.common.base.Preconditions;
+
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ public class Actions {
       MOUSE,
       Optional.of("default mouse"),
       /* primary */ true);
+  private final KeyInput defaultKeyboard = new KeyInput();
 
   public Actions click(WebElement target) {
     tick(defaultMouse.createPointerMove(Duration.ofMillis(250), target, 1, 1));
@@ -52,6 +56,17 @@ public class Actions {
     // And now pad the remaining sequences with a pause.
     for (InputDevice device : seenDevices) {
       getSequence(device).addAction(new Pause(device, Duration.ZERO));
+    }
+
+    return this;
+  }
+
+  public Actions tick(Action action) {
+    Preconditions.checkState(action instanceof IsInteraction);
+
+    for (Interaction interaction :
+        ((IsInteraction) action).asInteractions(defaultMouse, defaultKeyboard)) {
+      tick(interaction);
     }
 
     return this;

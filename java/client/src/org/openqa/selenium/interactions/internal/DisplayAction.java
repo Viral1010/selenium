@@ -17,7 +17,12 @@
 
 package org.openqa.selenium.interactions.internal;
 
+import org.openqa.selenium.interactive.Interaction;
+import org.openqa.selenium.interactive.KeyInput;
+import org.openqa.selenium.interactive.PointerInput;
 import org.openqa.selenium.internal.Locatable;
+
+import java.util.List;
 
 /**
  * This class represents an abstraction of devices that can execute an action within a display area.
@@ -32,4 +37,8 @@ public abstract class DisplayAction extends BaseAction {
     return (where == null) ? null : where.getCoordinates();
   }
 
+  @Override
+  public List<Interaction> asInteractions(PointerInput mouse, KeyInput keyboard) {
+    throw new UnsupportedOperationException("asInteractions");
+  }
 }

@@ -17,8 +17,18 @@
 
 package org.openqa.selenium.interactions;
 
+import com.google.common.collect.ImmutableList;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.interactions.internal.MouseAction;
+import org.openqa.selenium.interactive.Interaction;
+import org.openqa.selenium.interactive.KeyInput;
+import org.openqa.selenium.interactive.PointerInput;
 import org.openqa.selenium.internal.Locatable;
+
+import java.time.Duration;
+import java.util.List;
 
 /**
  * Releases the left mouse button
@@ -40,5 +50,19 @@ public class ButtonReleaseAction extends MouseAction implements Action {
   public void perform() {
     moveToLocation();
     mouse.mouseUp(getActionLocation());
+  }
+
+  @Override
+  public List<Interaction> asInteractions(PointerInput mouse, KeyInput keyboard) {
+    ImmutableList.Builder<Interaction> interactions = ImmutableList.builder();
+
+    Coordinates location = getActionLocation();
+    if (location != null && location.getAuxiliary() instanceof WebElement) {
+      WebElement target = (WebElement) location.getAuxiliary();
+      interactions.add(mouse.createPointerMove(Duration.ofMillis(500), target, 1, 1));
+    }
+    interactions.add(mouse.createPointerUp(Button.LEFT.asArg()));
+
+    return interactions.build();
   }
 }

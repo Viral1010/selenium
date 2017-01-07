@@ -17,9 +17,17 @@
 
 package org.openqa.selenium.interactions;
 
+import com.google.common.collect.ImmutableList;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.MouseAction;
+import org.openqa.selenium.interactive.Interaction;
+import org.openqa.selenium.interactive.KeyInput;
+import org.openqa.selenium.interactive.PointerInput;
 import org.openqa.selenium.internal.Locatable;
+
+import java.time.Duration;
+import java.util.List;
 
 /**
  * Move the mouse to a location within the element provided. The coordinates provided specify the
@@ -40,5 +48,16 @@ public class MoveToOffsetAction extends MouseAction implements Action {
 
   public void perform() {
     mouse.mouseMove(getActionLocation(), xOffset, yOffset);
+  }
+
+  @Override
+  public List<Interaction> asInteractions(PointerInput mouse, KeyInput keyboard) {
+    WebElement target = getTargetElement();
+
+    ImmutableList.Builder<Interaction> interactions = ImmutableList.builder();
+
+    interactions.add(mouse.createPointerMove(Duration.ofMillis(500), target, xOffset, yOffset));
+
+    return interactions.build();
   }
 }

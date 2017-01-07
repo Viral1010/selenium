@@ -18,8 +18,13 @@
 package org.openqa.selenium.interactions;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactive.Interaction;
+import org.openqa.selenium.interactive.IsInteraction;
+import org.openqa.selenium.interactive.KeyInput;
+import org.openqa.selenium.interactive.PointerInput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,20 +33,8 @@ import java.util.List;
  * An action for aggregating actions and triggering all of them at the same time.
  *
  */
-public class CompositeAction implements Action {
-  private WebDriver driver;
+public class CompositeAction implements Action, IsInteraction {
   private List<Action> actionsList = new ArrayList<>();
-
-  public CompositeAction() {
-  }
-
-  /**
-   * @deprecated {@link WebDriver} parameter is ignored.
-   */
-  @Deprecated
-  public CompositeAction(WebDriver driver) {
-    this.driver = driver;
-  }
 
   public void perform() {
     for (Action action : actionsList) {
@@ -50,6 +43,7 @@ public class CompositeAction implements Action {
   }
 
   public CompositeAction addAction(Action action) {
+    Preconditions.checkNotNull(action, "Null actions are not supported.");
     actionsList.add(action);
     return this;
   }
@@ -57,5 +51,21 @@ public class CompositeAction implements Action {
   @VisibleForTesting
   int getNumberOfActions() {
     return actionsList.size();
+  }
+
+  @Override
+  public List<Interaction> asInteractions(PointerInput mouse, KeyInput keyboard) {
+    ImmutableList.Builder<Interaction> interactions = ImmutableList.builder();
+
+    for (Action action : actionsList) {
+      if (!(action instanceof IsInteraction)) {
+        throw new IllegalArgumentException(
+            String.format("Action must implement IsInteraction: %s", action));
+      }
+
+      interactions.addAll(((IsInteraction) action).asInteractions(mouse, keyboard));
+    }
+
+    return interactions.build();
   }
 }

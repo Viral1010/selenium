@@ -25,7 +25,7 @@ import org.openqa.selenium.internal.Locatable;
 /**
  * The user-facing API for emulating complex user gestures. Use this class rather than using the
  * Keyboard or Mouse directly.
- *
+ * <p>
  * Implements the builder pattern: Builds a CompositeAction containing all actions specified by the
  * method calls.
  */
@@ -68,7 +68,7 @@ public class Actions {
   }
 
   private void resetCompositeAction() {
-    action = new CompositeAction(driver);
+    action = new CompositeAction();
   }
 
   /**
