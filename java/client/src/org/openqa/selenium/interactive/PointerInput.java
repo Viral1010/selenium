@@ -43,7 +43,7 @@ public class PointerInput implements InputDevice, Encodable {
   }
 
   public Interaction createPointerMove(Duration duration, WebElement target, int x, int y) {
-    return new Move(this, duration, target, x, y);
+    return new Move(this, duration, Optional.ofNullable(target), x, y);
   }
 
   public Interaction createPointerDown(int button) {
@@ -97,12 +97,17 @@ public class PointerInput implements InputDevice, Encodable {
 
   private static class Move extends Interaction implements Encodable {
 
-    private final WebElement target;
+    private final Optional<WebElement> target;
     private final int x;
     private final int y;
     private final Duration duration;
 
-    protected Move(InputDevice source, Duration duration, WebElement target, int x, int y) {
+    protected Move(
+        InputDevice source,
+        Duration duration,
+        Optional<WebElement> target,
+        int x,
+        int y) {
       super(source);
 
       Preconditions.checkState(x >= 0, "X value must be 0 or greater: %d", x);
@@ -110,7 +115,7 @@ public class PointerInput implements InputDevice, Encodable {
 
       Preconditions.checkState(!duration.isNegative(), "Duration value must be 0 or greater: %s", duration);
 
-      this.target = Preconditions.checkNotNull(target, "Target not set");
+      this.target = target;
       this.x = x;
       this.y = y;
       this.duration = duration;
@@ -127,7 +132,10 @@ public class PointerInput implements InputDevice, Encodable {
 
       toReturn.put("type", "pointerMove");
       toReturn.put("duration", duration.toMillis());
-      toReturn.put("element", target);
+      if (target.isPresent()) {
+        toReturn.put("element", target.get());
+      }
+
       toReturn.put("x", x);
       toReturn.put("y", y);
 

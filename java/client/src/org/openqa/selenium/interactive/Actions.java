@@ -8,6 +8,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 import org.openqa.selenium.interactions.internal.MouseAction.Button;
 import org.openqa.selenium.interactive.PointerInput.MouseButton;
 
@@ -193,13 +194,48 @@ public class Actions {
     return tick(defaultMouse.createPointerUp(Button.LEFT.asArg()));
   }
 
-
+  /**
+   * Clicks in the middle of the given element. Equivalent to:
+   * <i>Actions.moveToElement(onElement).click()</i>
+   *
+   * @param target Element to click.
+   * @return A self reference.
+   */
   public Actions click(WebElement target) {
-    tick(defaultMouse.createPointerMove(Duration.ofMillis(250), target, 1, 1));
+    return tick(defaultMouse.createPointerMove(Duration.ofMillis(250), target, 1, 1))
+        .click();
+  }
+
+  /**
+   * Clicks at the current mouse location. Useful when combined with
+   * {@link #moveToElement(org.openqa.selenium.WebElement, int, int)} or
+   * {@link #moveByOffset(int, int)}.
+   * @return A self reference.
+   */
+  public Actions click() {
     tick(defaultMouse.createPointerDown(0));
     tick(defaultMouse.createPointerUp(0));
 
     return this;
+  }
+
+  /**
+   * Performs a double-click at middle of the given element. Equivalent to:
+   * <i>Actions.moveToElement(element).doubleClick()</i>
+   *
+   * @param onElement Element to move to.
+   * @return A self reference.
+   */
+  public Actions doubleClick(WebElement onElement) {
+    return moveToElement(onElement).doubleClick();
+  }
+
+  /**
+   * Performs a double-click at the current mouse location.
+   * @return A self reference.
+   */
+  public Actions doubleClick() {
+    return click().click();
   }
 
   /**
@@ -209,7 +245,94 @@ public class Actions {
    * @return A self reference.
    */
   public Actions moveToElement(WebElement toElement) {
-    return tick(defaultMouse.createPointerMove(Duration.ofMillis(250), toElement, 1, 1));
+    return moveToElement(toElement, 1, 1);
+  }
+
+  /**
+   * Moves the mouse to an offset from the top-left corner of the element.
+   * The element is scrolled into view and its location is calculated using getBoundingClientRect.
+   * @param toElement element to move to.
+   * @param xOffset Offset from the top-left corner. A negative value means coordinates left from
+   * the element.
+   * @param yOffset Offset from the top-left corner. A negative value means coordinates above
+   * the element.
+   * @return A self reference.
+   */
+  public Actions moveToElement(WebElement toElement, int xOffset, int yOffset) {
+    return tick(
+        defaultMouse.createPointerMove(Duration.ofMillis(250), toElement, xOffset, yOffset));
+  }
+
+  /**
+   * Moves the mouse from its current position (or 0,0) by the given offset. If the coordinates
+   * provided are outside the viewport (the mouse will end up outside the browser window) then
+   * the viewport is scrolled to match.
+   * @param xOffset horizontal offset. A negative value means moving the mouse left.
+   * @param yOffset vertical offset. A negative value means moving the mouse up.
+   * @return A self reference.
+   * @throws MoveTargetOutOfBoundsException if the provided offset is outside the document's
+   * boundaries.
+   */
+  public Actions moveByOffset(int xOffset, int yOffset) {
+    return  tick(defaultMouse.createPointerMove(Duration.ofMillis(200), null, xOffset, yOffset));
+  }
+
+  /**
+   * Performs a context-click at middle of the given element. First performs a mouseMove
+   * to the location of the element.
+   *
+   * @param target Element to move to.
+   * @return A self reference.
+   */
+  public Actions contextClick(WebElement target) {
+    return moveToElement(target).contextClick();
+  }
+
+  /**
+   * Performs a context-click at the current mouse location.
+   * @return A self reference.
+   */
+  public Actions contextClick() {
+    return tick(defaultMouse.createPointerDown(Button.RIGHT.asArg()))
+        .tick(defaultMouse.createPointerUp(Button.RIGHT.asArg()));
+  }
+
+  /**
+   * A convenience method that performs click-and-hold at the location of the source element,
+   * moves to the location of the target element, then releases the mouse.
+   *
+   * @param source element to emulate button down at.
+   * @param target element to move to and release the mouse at.
+   * @return A self reference.
+   */
+  public Actions dragAndDrop(WebElement source, WebElement target) {
+    return clickAndHold(source).moveToElement(target).release();
+  }
+
+  /**
+   * A convenience method that performs click-and-hold at the location of the source element,
+   * moves by a given offset, then releases the mouse.
+   *
+   * @param source element to emulate button down at.
+   * @param xOffset horizontal move offset.
+   * @param yOffset vertical move offset.
+   * @return A self reference.
+   */
+  public Actions dragAndDropBy(WebElement source, int xOffset, int yOffset) {
+    return clickAndHold(source).moveByOffset(xOffset, yOffset).release();
+  }
+
+  /**
+   * Performs a pause.
+   *
+   * @param pause pause duration, in milliseconds.
+   * @return A self reference.
+   *
+   * @deprecated 'Pause' is considered to be a bad design practice.
+   */
+  @Deprecated
+  public Actions pause(long pause) {
+    return tick(new Pause(defaultMouse, Duration.ofMillis(pause)));
   }
 
   public Actions tick(Interaction... actions) {
@@ -248,6 +371,9 @@ public class Actions {
     }
 
     return this;
+  }
+
+  public void perform() {
   }
 
   public Map<String, Object> toJson()  {
