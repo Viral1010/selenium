@@ -17,29 +17,23 @@
 
 package org.openqa.selenium.interactions;
 
-import org.openqa.selenium.interactions.internal.Coordinates;
+public abstract class Interaction {
 
-/**
- * Interface representing basic mouse operations.
- * @deprecated Replaced by methods on {@link Actions}
- */
-@Deprecated
-public interface Mouse {
-  void click(Coordinates where);
+  private final InputDevice source;
 
-  void doubleClick(Coordinates where);
+  protected Interaction(InputDevice source) {
+    // Avoiding a guava dependency.
+    if (source == null) {
+      throw new NullPointerException("Input source must not be null");
+    }
+    this.source = source;
+  }
 
-  void mouseDown(Coordinates where);
+  protected boolean isValidFor(SourceType sourceType) {
+    return source.getInputType() == sourceType;
+  }
 
-  void mouseUp(Coordinates where);
-
-  void mouseMove(Coordinates where);
-
-  /* Offset from the current location of the mouse pointer. */
-  void mouseMove(Coordinates where, long xOffset, long yOffset);
-
-  // Right-clicks an element.
-  void contextClick(Coordinates where);
-
-  // TODO: Scroll wheel support
+  public InputDevice getSource() {
+    return source;
+  }
 }

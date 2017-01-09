@@ -21,9 +21,6 @@ import com.google.common.collect.ImmutableList;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.KeysRelatedAction;
-import org.openqa.selenium.interactive.Interaction;
-import org.openqa.selenium.interactive.KeyInput;
-import org.openqa.selenium.interactive.PointerInput;
 import org.openqa.selenium.internal.Locatable;
 
 import java.time.Duration;

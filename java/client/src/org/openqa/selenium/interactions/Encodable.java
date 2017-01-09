@@ -17,29 +17,13 @@
 
 package org.openqa.selenium.interactions;
 
-import org.openqa.selenium.interactions.internal.Coordinates;
+import java.util.Map;
 
 /**
- * Interface representing basic mouse operations.
- * @deprecated Replaced by methods on {@link Actions}
+ * This interface allows a custom {@link Interaction} to be JSON encoded for the W3C wire format. It
+ * should not normally be exposed or used by user-facing APIs. Instead, these should traffic in the
+ * {@link Interaction} interface.
  */
-@Deprecated
-public interface Mouse {
-  void click(Coordinates where);
-
-  void doubleClick(Coordinates where);
-
-  void mouseDown(Coordinates where);
-
-  void mouseUp(Coordinates where);
-
-  void mouseMove(Coordinates where);
-
-  /* Offset from the current location of the mouse pointer. */
-  void mouseMove(Coordinates where, long xOffset, long yOffset);
-
-  // Right-clicks an element.
-  void contextClick(Coordinates where);
-
-  // TODO: Scroll wheel support
+public interface Encodable {
+  Map<String, Object> encode();
 }

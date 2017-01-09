@@ -60,9 +60,7 @@ public class BasicKeyboardInterfaceTest extends JUnit4TestBase {
 
     WebElement keyReporter = driver.findElement(By.id("keyReporter"));
 
-    Action sendLowercase = getBuilder(driver).sendKeys(keyReporter, "abc def").build();
-
-    sendLowercase.perform();
+    getBuilder(driver).sendKeys(keyReporter, "abc def").perform();
 
     shortWait.until(ExpectedConditions.attributeToBe(keyReporter, "value", "abc def"));
   }
@@ -75,15 +73,12 @@ public class BasicKeyboardInterfaceTest extends JUnit4TestBase {
 
     WebElement keysEventInput = driver.findElement(By.id("theworks"));
 
-    Action pressShift = getBuilder(driver).keyDown(keysEventInput, Keys.SHIFT).build();
-
-    pressShift.perform();
+    getBuilder(driver).keyDown(keysEventInput, Keys.SHIFT).perform();
 
     WebElement keyLoggingElement = driver.findElement(By.id("result"));
     String logText = keyLoggingElement.getText();
 
-    Action releaseShift = getBuilder(driver).keyUp(keysEventInput, Keys.SHIFT).build();
-    releaseShift.perform();
+    getBuilder(driver).keyUp(keysEventInput, Keys.SHIFT).perform();
 
     assertTrue("Key down event not isolated, got: " + logText,
                logText.endsWith("keydown"));
@@ -96,8 +91,7 @@ public class BasicKeyboardInterfaceTest extends JUnit4TestBase {
     driver.get(pages.javascriptPage);
     WebElement keysEventInput = driver.findElement(By.id("theworks"));
 
-    Action pressShift = getBuilder(driver).keyDown(keysEventInput, Keys.SHIFT).build();
-    pressShift.perform();
+    getBuilder(driver).keyDown(keysEventInput, Keys.SHIFT).perform();
 
     WebElement keyLoggingElement = driver.findElement(By.id("result"));
 
@@ -105,9 +99,7 @@ public class BasicKeyboardInterfaceTest extends JUnit4TestBase {
     assertTrue("Key down should be isolated for this test to be meaningful. " +
         "Got events: " + eventsText, eventsText.endsWith("keydown"));
 
-    Action releaseShift = getBuilder(driver).keyUp(keysEventInput, Keys.SHIFT).build();
-
-    releaseShift.perform();
+    getBuilder(driver).keyUp(keysEventInput, Keys.SHIFT).perform();
 
     eventsText = keyLoggingElement.getText();
     assertTrue("Key up event not isolated. Got events: " + eventsText,
@@ -126,14 +118,11 @@ public class BasicKeyboardInterfaceTest extends JUnit4TestBase {
 
     String existingResult = getFormEvents();
 
-    Action pressShift = getBuilder(driver).keyDown(keysEventInput, Keys.SHIFT).build();
-    pressShift.perform();
+    getBuilder(driver).keyDown(keysEventInput, Keys.SHIFT).perform();
 
-    Action sendLowercase = getBuilder(driver).sendKeys(keysEventInput, "ab").build();
-    sendLowercase.perform();
+    getBuilder(driver).sendKeys(keysEventInput, "ab").perform();
 
-    Action releaseShift = getBuilder(driver).keyUp(keysEventInput, Keys.SHIFT).build();
-    releaseShift.perform();
+    getBuilder(driver).keyUp(keysEventInput, Keys.SHIFT).perform();
 
     String expectedEvents = " keydown keydown keypress keyup keydown keypress keyup keyup";
     assertThatFormEventsFiredAreExactly("Shift key not held",
@@ -147,8 +136,7 @@ public class BasicKeyboardInterfaceTest extends JUnit4TestBase {
   public void testSendingKeysToActiveElement() {
     driver.get(pages.bodyTypingPage);
 
-    Action someKeys = getBuilder(driver).sendKeys("ab").build();
-    someKeys.perform();
+    getBuilder(driver).sendKeys("ab").perform();
 
     assertThatBodyEventsFiredAreExactly("keypress keypress");
     assertThatFormEventsFiredAreExactly("");
@@ -163,9 +151,7 @@ public class BasicKeyboardInterfaceTest extends JUnit4TestBase {
 
     keyReporter.click();
 
-    Action sendLowercase = getBuilder(driver).sendKeys("abc def").build();
-
-    sendLowercase.perform();
+    getBuilder(driver).sendKeys("abc def").perform();
 
     shortWait.until(ExpectedConditions.attributeToBe(keyReporter, "value", "abc def"));
   }

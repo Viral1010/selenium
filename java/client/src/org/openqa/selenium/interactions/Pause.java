@@ -17,29 +17,36 @@
 
 package org.openqa.selenium.interactions;
 
-import org.openqa.selenium.interactions.internal.Coordinates;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * Interface representing basic mouse operations.
- * @deprecated Replaced by methods on {@link Actions}
- */
-@Deprecated
-public interface Mouse {
-  void click(Coordinates where);
+public class Pause extends Interaction implements Encodable {
 
-  void doubleClick(Coordinates where);
+  private final Duration duration;
 
-  void mouseDown(Coordinates where);
+  // TODO(simons): Reduce visibility?
+  public Pause(InputDevice device, Duration duration) {
+    super(device);
 
-  void mouseUp(Coordinates where);
+    if (duration.isNegative()) {
+      throw new IllegalStateException("Duration must be set to 0 or more: " + duration);
+    }
+    this.duration = duration;
+  }
 
-  void mouseMove(Coordinates where);
+  @Override
+  protected boolean isValidFor(SourceType sourceType) {
+    return true;
+  }
 
-  /* Offset from the current location of the mouse pointer. */
-  void mouseMove(Coordinates where, long xOffset, long yOffset);
+  @Override
+  public Map<String, Object> encode() {
+    Map<String, Object> toReturn = new HashMap<>();
 
-  // Right-clicks an element.
-  void contextClick(Coordinates where);
+    toReturn.put("type", "pause");
+    toReturn.put("duration", duration.toMillis());
 
-  // TODO: Scroll wheel support
+    return toReturn;
+  }
 }

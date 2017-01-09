@@ -21,11 +21,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-import org.openqa.selenium.interactive.Interaction;
-import org.openqa.selenium.interactive.IsInteraction;
-import org.openqa.selenium.interactive.KeyInput;
-import org.openqa.selenium.interactive.PointerInput;
-
 import java.util.ArrayList;
 import java.util.List;
 

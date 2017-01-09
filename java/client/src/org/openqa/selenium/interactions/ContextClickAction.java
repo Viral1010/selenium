@@ -17,18 +17,13 @@
 
 package org.openqa.selenium.interactions;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.MouseAction;
-import org.openqa.selenium.interactive.Interaction;
-import org.openqa.selenium.interactive.KeyInput;
-import org.openqa.selenium.interactive.PointerInput;
 import org.openqa.selenium.internal.Locatable;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

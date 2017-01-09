@@ -20,7 +20,9 @@ package org.openqa.selenium.interactions;
 /**
  * Interface representing basic, low-level keyboard operations.  It offers a set of low-level "do as
  * I say" commands to allow precise emulation of user input.
+ * @deprecated Use methods on {@link Actions}. Replaced by the newer W3C interactions APIs.
  */
+@Deprecated
 public interface Keyboard {
 
   /**

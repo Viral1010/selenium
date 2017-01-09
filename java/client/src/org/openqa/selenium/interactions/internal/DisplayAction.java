@@ -17,9 +17,9 @@
 
 package org.openqa.selenium.interactions.internal;
 
-import org.openqa.selenium.interactive.Interaction;
-import org.openqa.selenium.interactive.KeyInput;
-import org.openqa.selenium.interactive.PointerInput;
+import org.openqa.selenium.interactions.Interaction;
+import org.openqa.selenium.interactions.KeyInput;
+import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.internal.Locatable;
 
 import java.util.List;

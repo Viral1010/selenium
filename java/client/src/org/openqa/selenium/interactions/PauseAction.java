@@ -19,11 +19,6 @@ package org.openqa.selenium.interactions;
 
 import com.google.common.collect.ImmutableList;
 
-import org.openqa.selenium.interactive.Interaction;
-import org.openqa.selenium.interactive.IsInteraction;
-import org.openqa.selenium.interactive.KeyInput;
-import org.openqa.selenium.interactive.PointerInput;
-
 import java.time.Duration;
 import java.util.List;
 
@@ -48,6 +43,6 @@ public class PauseAction implements Action, IsInteraction {
   @Override
   public List<Interaction> asInteractions(PointerInput mouse, KeyInput keyboard) {
     return ImmutableList.of(
-        new org.openqa.selenium.interactive.Pause(mouse, Duration.ofMillis(pause)));
+        new Pause(mouse, Duration.ofMillis(pause)));
   }
 }

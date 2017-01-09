@@ -19,9 +19,6 @@ package org.openqa.selenium.interactions;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.internal.SingleKeyAction;
-import org.openqa.selenium.interactive.Interaction;
-import org.openqa.selenium.interactive.KeyInput;
-import org.openqa.selenium.interactive.PointerInput;
 import org.openqa.selenium.internal.Locatable;
 
 import java.util.List;
@@ -29,7 +26,7 @@ import java.util.List;
 /**
  * Emulates key release only, without the press.
  *
- * @deprecated Use {@link Actions#keyUp(Keys)}
+ * @deprecated Use {@link org.openqa.selenium.interactions.Actions#keyUp(CharSequence)}
  */
 @Deprecated
 public class KeyUpAction extends SingleKeyAction implements Action {

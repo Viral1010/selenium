@@ -19,7 +19,10 @@ package org.openqa.selenium.interactions;
 
 /**
  * Interface representing a single user-interaction action.
+ *
+ * @deprecated Replaced by {@link Interaction} and the {@link Actions} class.
  */
+@Deprecated
 public interface Action {
   void perform();
 }
